@@ -21,4 +21,10 @@ from django.urls import path, include
 urlpatterns = [
        path('admin/', admin.site.urls),
        path('', include('app1.urls')),
+       #path('', include('library.urls')), # http://127.0.0.1:8000/project/my_path
+       path('', include('project.urls')), ## http://127.0.0.1:8000/project/admin/
+       path('', include('task_manager.urls')), ## http://127.0.0.1:8000/project/admin/
+       path('', include('library.urls')),
 ]
+
+
