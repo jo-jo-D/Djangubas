@@ -14,5 +14,5 @@ class ProjectListSerializer(serializers.ModelSerializer):
 class TaskListSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Task,
+        model = Task
         fields = [ 'id', 'name', 'description']

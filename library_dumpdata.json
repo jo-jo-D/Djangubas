@@ -1,0 +1,268 @@
+[
+{
+    "model": "library.author",
+    "pk": 1,
+    "fields": {
+        "first_name": "Author",
+        "last_name": "1",
+        "date_of_birth": "2025-07-14",
+        "profile": null,
+        "is_deleted": false,
+        "rating": null
+    }
+},
+{
+    "model": "library.publisher",
+    "pk": 1,
+    "fields": {
+        "name": "Publisher 1",
+        "slug": "publisher-1",
+        "established_date": "2025-07-14"
+    }
+},
+{
+    "model": "library.publisher",
+    "pk": 2,
+    "fields": {
+        "name": "Publisher 2",
+        "slug": "publisher",
+        "established_date": "2025-07-14"
+    }
+},
+{
+    "model": "library.publisher",
+    "pk": 4,
+    "fields": {
+        "name": "Super Publisher",
+        "slug": "publisher",
+        "established_date": "2025-07-17"
+    }
+},
+{
+    "model": "library.genre",
+    "pk": 1,
+    "fields": {
+        "name": "Hello"
+    }
+},
+{
+    "model": "library.genre",
+    "pk": 2,
+    "fields": {
+        "name": "Fantasy"
+    }
+},
+{
+    "model": "library.genre",
+    "pk": 3,
+    "fields": {
+        "name": "Mystery"
+    }
+},
+{
+    "model": "library.genre",
+    "pk": 4,
+    "fields": {
+        "name": "Biography"
+    }
+},
+{
+    "model": "library.genre",
+    "pk": 10,
+    "fields": {
+        "name": "Fiction"
+    }
+},
+{
+    "model": "library.book",
+    "pk": 3,
+    "fields": {
+        "title": "Book 3 book",
+        "author": 1,
+        "publication_date": "2010-09-30",
+        "description": "A science fiction novel by Finnish writer Hannu Rajaniemi, featuring the gentleman thief Jean le Flambeur.",
+        "amount_pages": 336,
+        "publisher": 1,
+        "created_at": "2025-07-14T10:25:11Z",
+        "category": 1,
+        "price": 16,
+        "is_banned": false,
+        "is_deleted": false,
+        "owner": null,
+        "genres": [
+            1
+        ],
+        "libraries": [
+            1,
+            2
+        ]
+    }
+},
+{
+    "model": "library.book",
+    "pk": 4,
+    "fields": {
+        "title": "Book 4 book",
+        "author": 1,
+        "publication_date": "2010-09-30",
+        "description": "A science fiction novel by Finnish writer Hannu Rajaniemi, featuring the gentleman thief Jean le Flambeur.",
+        "amount_pages": 336,
+        "publisher": 1,
+        "created_at": "2025-07-14T11:05:34Z",
+        "category": 1,
+        "price": 20,
+        "is_banned": false,
+        "is_deleted": false,
+        "owner": null,
+        "genres": [
+            1
+        ],
+        "libraries": [
+            1,
+            2
+        ]
+    }
+},
+{
+    "model": "library.book",
+    "pk": 5,
+    "fields": {
+        "title": "Book new",
+        "author": 1,
+        "publication_date": "2025-07-16",
+        "description": "There is a summary",
+        "amount_pages": 125,
+        "publisher": 2,
+        "created_at": "2025-07-16T13:06:00Z",
+        "category": 1,
+        "price": null,
+        "is_banned": false,
+        "is_deleted": false,
+        "owner": null,
+        "genres": [
+            1,
+            2
+        ],
+        "libraries": [
+            2
+        ]
+    }
+},
+{
+    "model": "library.book",
+    "pk": 6,
+    "fields": {
+        "title": "asdfasdfasdf",
+        "author": 1,
+        "publication_date": "2025-07-16",
+        "description": "",
+        "amount_pages": null,
+        "publisher": 2,
+        "created_at": null,
+        "category": null,
+        "price": null,
+        "is_banned": true,
+        "is_deleted": false,
+        "owner": null,
+        "genres": [
+            2
+        ],
+        "libraries": [
+            2
+        ]
+    }
+},
+{
+    "model": "library.book",
+    "pk": 7,
+    "fields": {
+        "title": "Book 3 book",
+        "author": null,
+        "publication_date": null,
+        "description": null,
+        "amount_pages": null,
+        "publisher": 1,
+        "created_at": null,
+        "category": null,
+        "price": null,
+        "is_banned": false,
+        "is_deleted": false,
+        "owner": null,
+        "genres": [],
+        "libraries": []
+    }
+},
+{
+    "model": "library.book",
+    "pk": 8,
+    "fields": {
+        "title": "!updated Book created by Postman",
+        "author": null,
+        "publication_date": null,
+        "description": null,
+        "amount_pages": null,
+        "publisher": 1,
+        "created_at": null,
+        "category": null,
+        "price": null,
+        "is_banned": false,
+        "is_deleted": false,
+        "owner": null,
+        "genres": [
+            2
+        ],
+        "libraries": [
+            2
+        ]
+    }
+},
+{
+    "model": "library.book",
+    "pk": 9,
+    "fields": {
+        "title": "!updated Book created by Postman",
+        "author": 1,
+        "publication_date": null,
+        "description": null,
+        "amount_pages": null,
+        "publisher": null,
+        "created_at": null,
+        "category": null,
+        "price": null,
+        "is_banned": false,
+        "is_deleted": false,
+        "owner": 1,
+        "genres": [
+            2
+        ],
+        "libraries": [
+            2
+        ]
+    }
+},
+{
+    "model": "library.category",
+    "pk": 1,
+    "fields": {
+        "name": "Category 1"
+    }
+},
+{
+    "model": "library.library",
+    "pk": 1,
+    "fields": {
+        "title": "Lib1",
+        "location": "Loc",
+        "website": "https://www.site.com"
+    }
+},
+{
+    "model": "library.library",
+    "pk": 2,
+    "fields": {
+        "title": "Lib 2",
+        "location": "Loc",
+        "website": "https://www.site.com"
+    }
+}
+]

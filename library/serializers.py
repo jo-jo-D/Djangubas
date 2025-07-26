@@ -1,30 +1,22 @@
 from rest_framework import serializers
-from .models import Book, Publisher, Genre
 from django.utils import timezone
+from .models import Book, Publisher, Genre
 from .validators import validate_title_length
+
 
 class PublisherSerializer(serializers.ModelSerializer):
     class Meta:
-        Model = Publisher
+        model = Publisher
         fields = '__all__'
-
-class GenreSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Genre
-        fields = ['id', 'name']
 
 
 class BookCreateSerializer(serializers.ModelSerializer):
     # created_at = serializers.DateTimeField(read_only=True)
-
     title = serializers.CharField(validators=[validate_title_length])
-    amount_of_pages = serializers.IntegerField()
+    pages = serializers.IntegerField()
     publisher = serializers.SlugRelatedField(
         slug_field='slug',
-        queryset=Publisher.objects.all(),
-    )
-    discounted_price = serializers.DecimalField(
-        max_digits=10, decimal_places=2, write_only=True, required=False
+        queryset=Publisher.objects.all()
     )
 
     class Meta:
@@ -42,7 +34,7 @@ class BookCreateSerializer(serializers.ModelSerializer):
 
         return super().update(instance, validated_data)
 
-    def validate_amount_pages(self, value):
+    def validate_pages(self, value):
         if value < 1:
             raise serializers.ValidationError('Amount of pages cant be less then 1.')
         return value
@@ -50,15 +42,26 @@ class BookCreateSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data.get('discounted_price') and data.get('price'):
             if data['discounted_price'] > data['price']:
-                raise serializers.ValidationError('Discounted price cannot be higher than regular price')
+                raise serializers.ValidationError('Discounted price cant be higher then regular price.')
 
         return data
 
-class BookListSerializer(serializers.ModelSerializer):
 
+class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = '__all__'
+
+    def to_representation(self, instance):
+        # Получаем стандартное представление объекта
+        representation = super().to_representation(instance)
+
+        # Проверяем флаг, который мы передали из представления
+        if not self.context.get('include_related'):
+            # Если флаг false, удаляем поле 'genres' из ответа
+            representation.pop('genres', None)
+
+        return representation
 
 
 class BookDetailSerializer(serializers.ModelSerializer):
@@ -71,9 +74,14 @@ class BookDetailSerializer(serializers.ModelSerializer):
     # )
 
     publisher = serializers.PrimaryKeyRelatedField(queryset=Publisher.objects.all())
-    genres = serializers.PrimaryKeyRelatedField(many=True, queryset=Genre.objects.all())
+    genres = serializers.PrimaryKeyRelatedField(queryset=Genre.objects.all(), many=True)
 
     class Meta:
         model = Book
         fields = '__all__'
 
+
+class GenreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Genre
+        fields = '__all__'

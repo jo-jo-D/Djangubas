@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from shop.views import LoginView
 
 
 urlpatterns = [
@@ -25,6 +26,7 @@ urlpatterns = [
        path('', include('project.urls')), ## http://127.0.0.1:8000/project/admin/
        path('', include('task_manager.urls')), ## http://127.0.0.1:8000/project/admin/
        path('', include('library.urls')),
+       path('', include('shop.urls')),
 ]
-
+# {"username": "admin", "password": "admin"}
 
