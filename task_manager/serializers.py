@@ -16,6 +16,12 @@ class SubTaskCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['created_at']
 
+class SubTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubTask
+        fields = ['title', 'task', 'status', 'deadline', 'description', 'created_at']
+
+
 class CategoryCreateSerializer(serializers.ModelSerializer):
     name = serializers.CharField(validators=[UniqueValidator(queryset=Category.objects.all())])
 
@@ -35,11 +41,6 @@ class CategoryCreateSerializer(serializers.ModelSerializer):
         if Category.objects.filter(name=name).exists():
             raise ValidationError('Category with such name already exists.')
         return super().update(instance, validated_data)
-
-class SubTaskSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SubTask
-        fields = ['title', 'task', 'status', 'deadline', 'description', 'created_at']
 
 class TaskDetailSerializer(serializers.ModelSerializer):
     subtasks = SubTaskSerializer(read_only=True, many=True)
