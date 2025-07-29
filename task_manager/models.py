@@ -1,6 +1,7 @@
 from django.utils import timezone
 from datetime import timedelta
 from django.db import models
+from .managers import SoftDeleteManager
 
 
 STATUS_CHOICES = {
@@ -12,6 +13,8 @@ STATUS_CHOICES = {
     'pending': 'Pending',
 }
 
+def default_deadline():
+    return timezone.now() + timedelta(weeks=1)
 
 class Task(models.Model):
     title = models.CharField(max_length=100, unique_for_date="deadline")
@@ -19,7 +22,7 @@ class Task(models.Model):
     description = models.TextField()
     categories = models.ManyToManyField('Category', related_name='tasks', verbose_name="Category of the task")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new', verbose_name="Status of the task")
-    deadline = models.DateTimeField(default=timezone.now() + timedelta(weeks=1), verbose_name="Deadline")
+    deadline = models.DateTimeField(default=default_deadline, verbose_name="Deadline")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created at")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated at")
 
@@ -38,7 +41,7 @@ class SubTask(models.Model):
     description = models.TextField()
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='subtasks')
     status = models.CharField(choices=STATUS_CHOICES, default='new', verbose_name="Status of the subtask")
-    deadline = models.DateTimeField(default=timezone.now() + timedelta(weeks=1), verbose_name="Deadline")
+    deadline = models.DateTimeField(default=default_deadline, verbose_name="Deadline")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created at")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated at")
 
@@ -65,10 +68,27 @@ TASK_CATEGORIES = [
 ]
 
 class Category(models.Model):
-    name = models.CharField(max_length=50, choices=TASK_CATEGORIES, verbose_name="Category of the task")
+    name = models.CharField(max_length=50, choices=TASK_CATEGORIES, verbose_name="category of the task")
+    is_deleted = models.BooleanField(default=False, verbose_name="is deleted")
+    deleted_at = models.DateTimeField(null=True, blank=True, verbose_name="deleted at")
+    restored_at = models.DateTimeField(null=True, blank=True, verbose_name="restored at")
+
+    objects = SoftDeleteManager()
+    all_objects = models.Manager()
+
+    def delete(self, *args, **kwargs):
+        self.is_deleted = True
+        self.deleted_at = timezone.now()
+        self.save()
+
+    def restore(self):
+        self.is_deleted = False
+        self.restored_at = timezone.now()
+        self.save()
 
     def __str__(self):
         return f"{self.name}"
+
 
     class Meta:
         db_table = 'task_manager_category'

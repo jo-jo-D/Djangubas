@@ -3,9 +3,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.views import APIView
-from task_manager.models import Task, SubTask
-from task_manager.serializers import TaskSerializer, SubTaskCreateSerializer
-from rest_framework.decorators import api_view
+from rest_framework.viewsets import ModelViewSet
+
+from task_manager.models import Task, SubTask, Category, Category
+from task_manager.serializers import TaskSerializer, SubTaskCreateSerializer, CategoryCreateSerializer
+from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from rest_framework import status, filters, serializers
 from django.db.models import Q, Count
@@ -184,3 +186,20 @@ class SubTaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
 #                 return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 #             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 #
+
+class CategoryViewSet(ModelViewSet):
+    query = Category.objects.all()
+    serializer_class = CategoryCreateSerializer
+
+    @action(detail=False, methods=['get'])
+    def count_tasks(self, request):
+        category_with_counted_tasks = Category.objects.annotate(task_count=Count('tasks'))
+
+        data = [
+            {
+                "id":category.id,
+                "category": category.name,
+                "book_count":category.book_count,
+            } for category in category_with_counted_tasks
+        ]
+        return Response(data=data, status=status.HTTP_200_OK)
