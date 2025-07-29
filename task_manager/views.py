@@ -188,7 +188,7 @@ class SubTaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
 #
 
 class CategoryViewSet(ModelViewSet):
-    query = Category.objects.all()
+    queryset = Category.objects.all()
     serializer_class = CategoryCreateSerializer
 
     @action(detail=False, methods=['get'])
@@ -199,7 +199,7 @@ class CategoryViewSet(ModelViewSet):
             {
                 "id":category.id,
                 "category": category.name,
-                "book_count":category.book_count,
+                "task_count":category.task_count,
             } for category in category_with_counted_tasks
         ]
         return Response(data=data, status=status.HTTP_200_OK)

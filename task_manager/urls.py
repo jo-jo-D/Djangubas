@@ -5,7 +5,7 @@ from .views import (get_stats, TaskDetailUpdateDeleteView, CategoryViewSet,
                     SubTaskListCreateView, SubTaskDetailUpdateDeleteView, TaskListCreateView)
 
 router = DefaultRouter()
-router.register('category/', CategoryViewSet, basename='category')
+router.register('task-category', CategoryViewSet, basename='task-category')
 
 urlpatterns = [
     path('tasks/stats/', get_stats, name='get stats of the all tasks'),
