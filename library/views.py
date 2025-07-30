@@ -2,9 +2,11 @@ from datetime import datetime
 
 from django.db.models import Avg, Count
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.authentication import BasicAuthentication
 from rest_framework.decorators import api_view, action
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status, filters, mixins
 from rest_framework.views import APIView
@@ -16,6 +18,20 @@ from .models import Book, Genre, Publisher
 from .serializers import BookSerializer, BookDetailSerializer, BookCreateSerializer, GenreSerializer
 from .permissions import IsOwnerOrReadOnly
 
+
+
+class ProtectedDataView(APIView):
+    #   указываем, какие классы аутентификации использовать для этого представления
+    #   здесь мы явно переопределяем или подтверждаем BasicAuthentication.
+    authentication_classes = [BasicAuthentication]
+    #   указываем какие классы разрешений использовать.
+    #   IsAuthenticated означает что только эти аут. имеют доступ
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        #   если запрос дошел сюда, значит пользователь аутентифицирован и авторизирован
+        #request.user теперь содержит объект пользователя
+        return Response({"message": f"Hello, {request.user.username}!", "user": request.user.username})
 
 
 # @api_view(['GET', 'POST'])

@@ -28,8 +28,8 @@ class Supplier(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='products')
-    supplier = models.ForeignKey(Supplier, on_delete=models.PROTECT, related_name='products')
+    category = models.ForeignKey(Category, null=True, on_delete=models.PROTECT, related_name='products')
+    supplier = models.ForeignKey(Supplier, null=True, on_delete=models.PROTECT, related_name='products')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=0)
     article = models.CharField(max_length=100, unique=True, help_text="Unique string product id", db_index=True)

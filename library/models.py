@@ -2,10 +2,10 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 import datetime
+
+from django.db.models import ForeignKey
 from django.utils import timezone
 from library.managers import SoftDeleteManager
-
-
 
 class Author(models.Model):
 

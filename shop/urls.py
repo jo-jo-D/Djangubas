@@ -12,7 +12,7 @@ router = DefaultRouter()
 # Регистрируем наш ViewSet.
 # 'category' - это префикс URL, по которому будут доступны наши категории.
 # CategoryViewSet - представление, которое будет обрабатывать запросы.
-router.register('category', CategoryViewSet)
+router.register('shop-category', CategoryViewSet)
 router.register('supplier', SupplierViewSet)
 router.register('product-detail', ProductDetailViewSet)
 router.register('address', AddressViewSet)

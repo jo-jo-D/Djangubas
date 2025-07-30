@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter, SimpleRouter
 # from .views import book_list_create, book_detail_update_delete
 from .views import create_genre, BookListCreateView, BookDetailUpdateDeleteView, \
     ExpensiveBooksView, GenreDetailUpdateDeleteView, GenreViewSet, \
-    books_by_date_view, lazy_load_demo, create_book_and_publisher_view
+    books_by_date_view, lazy_load_demo, create_book_and_publisher_view, ProtectedDataView
 
 # urlpatterns = [
 #     path('books/', book_list_create, name='book-list-create'),  # Для получения всех книг и создания новой книги
@@ -23,4 +23,5 @@ urlpatterns = [path('books/', BookListCreateView.as_view(), name='book-list-crea
     re_path(r'^books/(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/$', books_by_date_view, name='books-by-date'),
     path('lazy_load/', lazy_load_demo, name='lazy-load-demo'),
     path('books/transaction/', create_book_and_publisher_view, name='book-create-book-and-publisher'),
+    path('protected/', ProtectedDataView.as_view(), name='protected-data'),
 ]
