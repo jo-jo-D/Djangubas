@@ -229,12 +229,12 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
-    ]
+    ],
 }
 
 SIMPLE_JWT = {
     # Время жизни access токена (короткое)
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
     # Время жизни refresh токена (длинное)
     'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
     # Включаем ротацию refresh токенов для повышения безопасности

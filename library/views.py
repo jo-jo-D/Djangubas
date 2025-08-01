@@ -6,7 +6,7 @@ from rest_framework.authentication import BasicAuthentication
 from rest_framework.decorators import api_view, action
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import status, filters, mixins
 from rest_framework.views import APIView
@@ -18,12 +18,37 @@ from .models import Book, Genre, Publisher
 from .serializers import BookSerializer, BookDetailSerializer, BookCreateSerializer, GenreSerializer
 from .permissions import IsOwnerOrReadOnly
 
+class ReadOnlyOrAuthenticatedView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
+    def get(self, request):
+        return Response({"message":"This is open to read for anyone, but modifications allowed only for authenticated users."})
+
+    def post(self, request):
+        return Response({"message":"Data created by authenticated user!"})
+
+
+class AdminView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        return Response({"message": "Greetings, Admin!"})
+
+class PublicView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, format=None):
+        return Response(status=status.HTTP_200_OK, data={"message": "This endpoint is open for everyone"})
 
 class ProtectedDataView(APIView):
     #   указываем, какие классы аутентификации использовать для этого представления
     #   здесь мы явно переопределяем или подтверждаем BasicAuthentication.
-    authentication_classes = [BasicAuthentication]
+
+    # authentication_classes = [BasicAuthentication]
+
+    #   если JWTAuthentication установлен как DEFAULT_AUTHENTICATION_CLASSES,
+    #   здесь можно просто указать разрешения, а DRF сам проверит токен.
+
     #   указываем какие классы разрешений использовать.
     #   IsAuthenticated означает что только эти аут. имеют доступ
     permission_classes = [IsAuthenticated]

@@ -16,17 +16,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 from shop.views import LoginView
 
 
 urlpatterns = [
        path('admin/', admin.site.urls),
-       path('', include('app1.urls')),
+       path('app1/', include('app1.urls')),
        #path('', include('library.urls')), # http://127.0.0.1:8000/project/my_path
-       path('', include('project.urls')), ## http://127.0.0.1:8000/project/admin/
+       path('project/', include('project.urls')), ## http://127.0.0.1:8000/project/admin/
        path('', include('task_manager.urls')), ## http://127.0.0.1:8000/project/admin/
-       path('', include('library.urls')),
-       path('', include('shop.urls')),
+       path('library/', include('library.urls')),
+       path('shop/', include('shop.urls')),
+       path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+       path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
-# {"username": "admin", "password": "admin"}
 
