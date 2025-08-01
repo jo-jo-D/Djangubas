@@ -2,6 +2,7 @@ from django.db.models.functions import ExtractWeekDay
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
@@ -12,6 +13,8 @@ from rest_framework.response import Response
 from rest_framework import status, filters, serializers
 from django.db.models import Q, Count
 from django.utils import timezone
+
+from .permissions import IsAdminOrReadOnly
 from .serializers import SubTaskSerializer
 from rest_framework.pagination import PageNumberPagination
 
@@ -28,6 +31,7 @@ class BaseListCreateView(ListCreateAPIView):
 
 class TaskListCreateView(BaseListCreateView):
     serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         queryset = Task.objects.all()
@@ -48,10 +52,13 @@ class TaskListCreateView(BaseListCreateView):
 class TaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
 
 
 @api_view(['GET'])
 def get_stats(request):
+    permission_classes = [IsAdminUser]
+
     amnt_info = Task.objects.count()
 
     task_status_dict = Task.objects.values('status').annotate(count=Count('id'))
@@ -73,6 +80,7 @@ def get_stats(request):
 
 class SubTaskListCreateView(BaseListCreateView):
     serializer_class = SubTaskCreateSerializer  #post уже реализован из коробки
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         queryset = SubTask.objects.all()
@@ -90,6 +98,7 @@ class SubTaskListCreateView(BaseListCreateView):
 class SubTaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = SubTask.objects.all()
     serializer_class = SubTaskCreateSerializer
+    permission_classes = [IsAuthenticated]
 
 # class SubTaskDetailUpdateDeleteView(APIView):
 #
@@ -190,6 +199,7 @@ class SubTaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
 class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategoryCreateSerializer
+    permission_classes = [IsAdminUser]
 
     @action(detail=False, methods=['get'])
     def count_tasks(self, request):
