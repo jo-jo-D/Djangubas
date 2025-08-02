@@ -2,6 +2,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.db import models
 from .managers import SoftDeleteManager
+from django.contrib.auth.models import User
 
 
 STATUS_CHOICES = {
@@ -25,6 +26,7 @@ class Task(models.Model):
     deadline = models.DateTimeField(default=default_deadline, verbose_name="Deadline")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created at")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated at")
+    owner = models.ForeignKey(User, verbose_name='owner', related_name='tasks',  on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return f"{self.title}, till {self.deadline.date()}"
@@ -44,6 +46,7 @@ class SubTask(models.Model):
     deadline = models.DateTimeField(default=default_deadline, verbose_name="Deadline")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created at")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated at")
+    owner = models.ForeignKey(User, verbose_name='owner', related_name='subtasks', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return f"{self.title}(regarding: '{self.task.title}', till {self.task.deadline.date()})"
